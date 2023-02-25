@@ -188,6 +188,7 @@ module.exports = {
   },
   Login: (req, res) => {
     const { accountName, password } = req.fields;
+    console.log(req);
 
     sequelize
       .query(`SELECT * FROM USERS WHERE name = '${accountName}';`)
