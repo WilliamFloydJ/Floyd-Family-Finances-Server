@@ -188,7 +188,6 @@ module.exports = {
   },
   Login: (req, res) => {
     const { accountName, password } = req.fields;
-    console.log(req);
 
     sequelize
       .query(`SELECT * FROM USERS WHERE name = '${accountName}';`)
@@ -200,8 +199,9 @@ module.exports = {
               name: seq[0][0].name,
               password: seq[0][0].password,
             };
-
-            res.status(200).send(req.session.user);
+            console.log(req.session)
+            req.session.save()
+            res.redirect(req.header('Referer'));
           } else {
             console.log("Password Did Not Match");
             res.status(204).send("Password Did Not Match");
@@ -232,7 +232,7 @@ module.exports = {
       const income = await sequelize.query(
         `insert into income (amount, userid) Values (0,(select userid from users where name = '${accountName}'))`
       );
-      res.status(200).redirect("/");
+      res.status(200).redirect(req.header('Referer'));
     } else {
       res.status(400).send("User with that Email Already Exists");
     }
